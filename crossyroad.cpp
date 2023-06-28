@@ -8,17 +8,6 @@ const int SIZE2 = 24;
 
 void initField(char** field);
 
-void showArray(char** array) {
-    int size = _msize(array) / sizeof(array[0]);
-    for (int i = 0; i < size; i++) {
-        for (int j = 0; j < size; j++) {
-            cout << array[i][j] << " ";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
-
 int keyboard() {
     if (_kbhit()) // слушатель нажатия на клаву
     {
@@ -39,7 +28,7 @@ int keyboard() {
     }
 }
 
-void render(char**& field, int*& player)
+void render(char**& field, int*& player, int*& obstacle)
 {
     for (int i = 0; i < SIZE2; i++)
     {
@@ -48,8 +37,8 @@ void render(char**& field, int*& player)
             field[i][j] = '*';
         }
     }
-
-    field[player[0]][player[1]] = '@';
+    field[player[1]][player[0]] = '@';
+    field[obstacle[1]][obstacle[0]] = '-';
     system("cls");
     for (int i = 0; i < SIZE2; i++)
     {
@@ -59,6 +48,37 @@ void render(char**& field, int*& player)
         }
         cout << endl;
     }
+}
+
+void updatePlayer(int*& player, int &dir) {
+    player[2] = dir;
+    switch (player[2]) {
+    case 4:
+        if (player[1] < SIZE1 - 1) {
+            player[1]++;
+        }
+        break;
+    case 3:
+        if (player[1] > 0) {
+            player[1]--;
+        }
+        break;
+    case 1:
+        if (player[0] > 0) {
+            player[0]--;
+        }
+        break;
+    case 2:
+        if (player[0] < SIZE2 - 1) {
+            player[0]++;
+        }
+        break;
+    }
+}
+
+void updateObstacle(int*& obstacle) {
+    if (obstacle[0] > SIZE1 - 1) obstacle[0]--;
+    else if (obstacle[0] == 0) obstacle[0] = SIZE1 - 1;
 }
 
 void initField(char** field) {
@@ -76,19 +96,21 @@ int main()
         field[i] = new char[SIZE1] {};
     }
     //create player
+    //1 up 2 down 3 left 4 right 0 stationary
     int dir = keyboard();
-    int* player = new int[2] { 4, 23, 0 };
+    int* player = new int[3] { 3, 23, 0 };
+
+    int* obstacle = new int[2]{ 6, 15 };
 
     initField(field);
-    showArray(field);
 
     //game
     while (true) {
-
-        render(field, player);
+        updatePlayer(player, dir);
+        updateObstacle(obstacle);
+        render(field, player, obstacle);
         Sleep(FPS);
         keyboard();
-
     }
 
 }
