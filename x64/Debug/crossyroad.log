@@ -1,0 +1,3 @@
+﻿  crossyroad.cpp
+C:\Users\srstafion_\source\repos\crossyroad\crossyroad.cpp(12,48): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  crossyroad.vcxproj -> C:\Users\srstafion_\source\repos\crossyroad\x64\Debug\crossyroad.exe
