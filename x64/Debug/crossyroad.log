@@ -1,3 +1,6 @@
 ﻿  crossyroad.cpp
-C:\Users\Взрослая академия\source\repos\crossyroad\crossyroad.cpp(29): warning C4715: keyboard: значение возвращается не при всех путях выполнения
-  crossyroad.vcxproj -> C:\Users\Взрослая академия\Source\Repos\crossyroad\x64\Debug\crossyroad.exe
+C:\Users\Даниил\Downloads\crossyroad-main\crossyroad.cpp(101,29): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+C:\Users\Даниил\Downloads\crossyroad-main\crossyroad.cpp(102,34): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+C:\Users\Даниил\Downloads\crossyroad-main\crossyroad.cpp(103,34): warning C4553: "==": результат выражения не используется; вы хотели использовать "="?
+C:\Users\Даниил\Downloads\crossyroad-main\crossyroad.cpp(34): warning C4715: keyboard: значение возвращается не при всех путях выполнения
+  crossyroad.vcxproj -> C:\Users\Даниил\Downloads\crossyroad-main\x64\Debug\crossyroad.exe
