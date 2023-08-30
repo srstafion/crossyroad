@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <Windows.h>
 #include <conio.h>
+#include <ctime>
 using namespace std;
 const int FPS = 100;
 const int WIDTH = 9;
@@ -58,7 +59,7 @@ int keyboard() {
 }
 //status: DONE
 
-void render(char**& field, int*& player, int& gamemode)
+void render(char**& field, int*& player, int& gamemode, int* carlanes)
 {
     int height;
     if (gamemode == 1) height = EZHEIGHT;
@@ -69,6 +70,7 @@ void render(char**& field, int*& player, int& gamemode)
         for (int j = 0; j < WIDTH; j++)
         {
             if (i == 0) field[i][j] = '=';
+            if (carlanes[i] == 1) field[i][j] = '#';
             else field[i][j] = '*';
         }
     }
@@ -159,6 +161,7 @@ bool winCheck(int*& player) {
 
 int main()
 {
+    srand(time(NULL));
     gameGoing = menu(gameGoing, gamemode);
     system("cls");
     int b;
@@ -180,6 +183,10 @@ int main()
     if (gamemode == 1) height = EZHEIGHT;
     else if (gamemode == 2) height = MDHEIGHT;
     else if (gamemode == 3) height = HDHEIGHT;
+    int carlanes[24];
+    for (int i = 1; i < height - 2; i++) {
+        carlanes[i] = rand() % 2;
+    }
 
     //create field
     char** field = new char* [height];
@@ -200,7 +207,7 @@ int main()
         int dir = keyboard();
         victory = winCheck(player);
         updatePlayer(player, dir);
-        render(field, player, gamemode);
+        render(field, player, gamemode, carlanes);
         Sleep(FPS);
         keyboard();
     }
