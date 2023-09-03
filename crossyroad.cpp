@@ -2,7 +2,7 @@
 #include <Windows.h>
 #include <conio.h>
 #include <ctime>
-using namespace std;
+using namespace std; 
 const int FPS = 100;
 const int WIDTH = 9;
 const int EZHEIGHT = 12;
@@ -25,7 +25,7 @@ bool menu(bool gameGoing, int gamemode) {
     cout << "2. Highscore" << endl;
     cin >> a;
     if (a == 1) {
- 
+
         return 1;
         system("cls");
     }
@@ -59,7 +59,22 @@ int keyboard() {
 }
 //status: DONE
 
-void render(char**& field, int*& player, int& gamemode, int* carlanes)
+int spawnCar(int& gamemode, int* carlanes, int** car) {
+    int height;
+    if (gamemode == 1) height = EZHEIGHT;
+    else if (gamemode == 2) height = MDHEIGHT;
+    else if (gamemode == 3) height = HDHEIGHT;
+    for (int i = 0; i < height; i++) {
+        if (carlanes[i] == 1) {
+            if (rand() % 8 == 1) {
+                car[i][0] = 1;
+                return car[i][0];
+            }
+        }
+    }
+}
+
+void render(char**& field, int*& player, int& gamemode, int* carlanes, int** car)
 {
     int height;
     if (gamemode == 1) height = EZHEIGHT;
@@ -69,12 +84,24 @@ void render(char**& field, int*& player, int& gamemode, int* carlanes)
     {
         for (int j = 0; j < WIDTH; j++)
         {
-            if (i == 0) field[i][j] = '=';
             if (carlanes[i] == 1) field[i][j] = '#';
-            else field[i][j] = '*';
+            else field[i][j] = '.';
+            field[0][j] = '=';
         }
     }
     field[player[1]][player[0]] = '@';
+    for (int i = 0; i < height; i++) {
+        if (car[i][0] == 1) field[i][0] = 'n';
+    }
+    for (int i = 0; i < height; i++) {
+        if (carlanes[i] == 1)
+        {
+            for (int j = 0; j < WIDTH; j++) {
+                if (car[i][j] == 1)field[i][j] = 'n';
+                //swap(car[i][j], car[i][j++]);
+            }
+        }
+    }
     system("cls");
     for (int i = 0; i < height; i++)
     {
@@ -90,7 +117,7 @@ void render(char**& field, int*& player, int& gamemode, int* carlanes)
 //2 IS UP
 //3 IS LEFT
 //4 IS RIGHT
-void updatePlayer(int*& player, int &dir) {
+void updatePlayer(int*& player, int& dir) {
     int height;
     if (gamemode == 1) height = EZHEIGHT;
     else if (gamemode == 2) height = MDHEIGHT;
@@ -128,7 +155,7 @@ void initField(char** field) {
     else if (gamemode == 3) height = HDHEIGHT;
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < WIDTH; j++)
-            field[i][j] = '*';
+            field[i][j] = '.';
     }
 }
 
@@ -143,7 +170,7 @@ bool winCheck(int*& player) {
 //    if (victory == 1) {
 //        int a;
 //        system("cls");
-//        cout << "\\_) _        \\  ^  / o  __ | " << endl;
+//        cout << "\\_)_        \\  ^   / o  __ | " << endl;
 //        cout << " / (_) (_(    \\/ \\/ /  / / o " << endl;
 //        cout << "Would you like to play again? (1 - Play Again, 2 - Menu)";
 //        cin >> a;
@@ -187,6 +214,10 @@ int main()
     for (int i = 1; i < height - 2; i++) {
         carlanes[i] = rand() % 2;
     }
+    int** car = new int* [24] {};
+    for (int i = 0; i < 24; i++) {
+        car[i] = new int[WIDTH] {};
+    }
 
     //create field
     char** field = new char* [height];
@@ -198,7 +229,7 @@ int main()
     //2 IS UP
     //3 IS LEFT
     //4 IS RIGHT
-    int* player = new int[3] { (WIDTH/2), (height-1), 0 };
+    int* player = new int[3] { (WIDTH / 2), (height - 1), 0 };
 
     initField(field);
     bool victory = 0;
@@ -207,7 +238,8 @@ int main()
         int dir = keyboard();
         victory = winCheck(player);
         updatePlayer(player, dir);
-        render(field, player, gamemode, carlanes);
+        spawnCar(gamemode, carlanes, car);
+        render(field, player, gamemode, carlanes, car);
         Sleep(FPS);
         keyboard();
     }
