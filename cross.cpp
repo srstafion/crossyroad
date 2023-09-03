@@ -6,45 +6,81 @@ using namespace std;
 int width = 9;
 int height = 24;
 
-//X1 <   X2 >   Y1 ^   Y2 V
-int* player = new int[2] {(width/2), 24};
-
-bool GOver;
-
-bool carPos;
-void carLane(bool carPos, int width) {
-    for (int i = 0; i <= width; i++) {
-        carPos = false;
+int spawnCar(int* carlanes, int** car) {
+    for (int i = 0; i < height; i++) {
+        if (carlanes[i] == 1) {
+            if (rand() % 8 == 1) {
+                car[i][0] = 1;
+                return car[i][0];
+            }
+        }
     }
 }
-void MoveCar(bool carPos) {
-    
-}
-void Draw() {
 
-}
-void KeyIn() {
-
-}
-
-
-int main()
+void render(char**& field, int* carlanes, int** car)
 {
-    srand(time(NULL));
-    carLane(carPos, 9);
-    cout << endl;
-    for (int i = 0; i < 9; i++) {
-        if (i == true) cout << '#';
-        else cout << '_';
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            if (carlanes[i] == 1) field[i][j] = '#';
+            else field[i][j] = '.';
+            field[0][j] = '=';
+        }
     }
-    MoveCar(carPos); 
-    cout << endl;
-    for (int i = 0; i < 9; i++) {
-        if (i == true) cout << '#';
-        else cout << '_';
+    for (int i = 0; i < height; i++) {
+        if (car[i][0] == 1) field[i][0] = 'n';
     }
-    while (!GOver) {
-        Draw();
-        KeyIn();
+    for (int i = 0; i < height; i++) {
+        if (carlanes[i] == 1)
+        {
+            for (int j = 0; j < width; j++) {
+                if (car[i][j] == 1)field[i][j] = 'n';
+                swap(car[i][j], car[i][j++]);
+            }
+        }
+    }
+    for (int i = 0; i < height; i++) {
+        if (carlanes[i] == 1)
+        {
+            for (int j = 0; j < width; j++) {
+                if (car[i][j] == 1) field[i][j] = 'n';
+            }
+        }
+    }
+    system("cls");
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
+            cout << field[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+void initField(char** field) {
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++)
+            field[i][j] = '.';
+    }
+} 
+int main() 
+{
+    int carlanes[24];
+    for (int i = 1; i < height - 2; i++) {
+        carlanes[i] = rand() % 2;
+    }
+    int** car = new int* [24] {};
+    for (int i = 0; i < 24; i++) {
+        car[i] = new int[width] {};
+    }
+    char** field = new char* [height];
+    for (int i = 0; i < height; i++) {
+        field[i] = new char[width] {};
+    }
+    while (true) {
+        render(field, carlanes, car);
+        spawnCar(carlanes, car);
+        Sleep(500);
     }
 }

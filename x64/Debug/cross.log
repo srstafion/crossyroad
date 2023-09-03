@@ -1,5 +1,3 @@
 ﻿  cross.cpp
-C:\Users\Даниил\source\repos\cross\cross\cross.cpp(33,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
-C:\Users\Даниил\source\repos\cross\cross\cross.cpp(37,18): warning C4805: ==: небезопасное смешение типа "int" и типа "bool" в операции
-C:\Users\Даниил\source\repos\cross\cross\cross.cpp(43,18): warning C4805: ==: небезопасное смешение типа "int" и типа "bool" в операции
+C:\Users\Даниил\source\repos\cross\cross\cross.cpp(18): warning C4715: spawnCar: значение возвращается не при всех путях выполнения
   cross.vcxproj -> C:\Users\Даниил\source\repos\cross\x64\Debug\cross.exe
